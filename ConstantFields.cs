@@ -1,5 +1,6 @@
 using System.Reflection;
 using MicIndicator;
+using Photon.Voice.Unity;
 // using Everything;
 
 internal class ConstantFields
@@ -24,23 +25,24 @@ internal class ConstantFields
         return infiniteStamina;
     }
 
-    private static PropertyInfo statusLock = null;
-    public static PropertyInfo GetStatusLockField()
+    private static FieldInfo ampPeak = null;
+    public static FieldInfo GetVoiceAudioField()
     {
-        if (statusLock == null)
+        if (ampPeak == null)
         {
-            var fields = typeof(Character).GetProperties();
+            var fields = typeof(Photon.Voice.AudioUtil.LevelMeterFloat).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
             foreach (var field in fields)
             {
-                if (field.Name.ToLower().Contains("statuseslocked"))
+                // Plugin.Logger.LogError(field.Name);
+                if (field.Name.ToLower().Contains("amppeak"))
                 {
                     // Plugin.Logger.LogError("FOUD  THING");
-                    statusLock = field;
+                    ampPeak = field;
                     break;
                 }
             }
         }
-        return statusLock;
+        return ampPeak;
     }
 
     private static FieldInfo fallDamageTime = null;

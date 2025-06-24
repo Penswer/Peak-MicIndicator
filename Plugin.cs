@@ -31,6 +31,8 @@ public class Plugin : BaseUnityPlugin
     public static ConfigEntry<Vector2> configPosition;
     public static ConfigEntry<float> configScale;
 
+    public static ConfigEntry<float> configMicDetectionThreshold;
+
     internal static Texture2D micOnTex = null;
     internal static Texture2D micOffTex = null;
 
@@ -41,8 +43,9 @@ public class Plugin : BaseUnityPlugin
         // Plugin startup logic
         configToggleKey = Config.Bind("Keybinds", "ToggleKey", KeyCode.End, "The key used to toggle the GUI on and off");
         configIsActive = Config.Bind("GUI", "IsActive", true, "If the icon is showing");
-        configPosition = Config.Bind("GUI", "Position", new Vector2(-920f, -370f), "The position of the icon");
-        configScale = Config.Bind("GUI", "Scale", 5.0f, "The scale of the icon");
+        configPosition = Config.Bind("GUI", "Position", new Vector2(100f, 160f), "The position of the icon");
+        configScale = Config.Bind("GUI", "Scale", 100f, "The scale of the icon");
+        configMicDetectionThreshold = Config.Bind("Mic", "MicDetectionThreshold", .001f, "Mic Detection Min Value. Increase to make mic detection less sensitive. Decrease to make it more sensitive");
         Logger = base.Logger;
         Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         foreach (var option in Environment.GetCommandLineArgs())
@@ -53,6 +56,7 @@ public class Plugin : BaseUnityPlugin
         micOnTex = GetTextureFromAssemImage("MicIndicator.Images.MicOn.png");
         micOffTex = GetTextureFromAssemImage("MicIndicator.Images.MicOff.png");
         itsTimeXD = true;
+        // ConstantFields.GetVoiceAudioField();
         // micIcon.GetComponent<RawImage>()
     }
 

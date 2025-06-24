@@ -3,6 +3,7 @@ using System;
 using MicIndicator;
 using Photon.Voice.PUN;
 using UnityEngine.UI;
+using Photon.Voice;
 
 public class EventComponent : MonoBehaviour
 {
@@ -23,9 +24,14 @@ public class EventComponent : MonoBehaviour
                     // micIcon = micIconLocal;
                     micIconLocal = GameObject.Instantiate(micIconLocal);
                     micIconLocal.transform.parent = micIconLocalParent.transform;
-                    micIconLocal.transform.localScale = new Vector3(Plugin.configScale.Value, Plugin.configScale.Value, Plugin.configScale.Value);
-                    micIconLocal.transform.localPosition = new Vector3(Plugin.configPosition.Value.x, Plugin.configPosition.Value.y, 0.0f);
-
+                    // micIconLocal.transform.localScale = new Vector3(Plugin.configScale.Value, Plugin.configScale.Value, Plugin.configScale.Value);
+                    // micIconLocal.transform.localPosition = new Vector3(Plugin.configPosition.Value.x, Plugin.configPosition.Value.y, 0.0f);
+                    RectTransform rect = micIconLocal.transform as RectTransform;
+                    rect.anchoredPosition = new Vector2(Plugin.configPosition.Value.x, Plugin.configPosition.Value.y);
+                    rect.sizeDelta = new Vector2(Plugin.configScale.Value, Plugin.configScale.Value);
+                    rect.anchorMax = new Vector2(0, 0);
+                    rect.anchorMin = new Vector2(0, 0);
+                    rect.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                     // micIconLocal.SetActive(Plugin.configIsActive.Value);
                     RawImage micIconImageLocal = micIconLocal.GetComponent<RawImage>();
                     if (micIconImageLocal != null)
@@ -44,7 +50,10 @@ public class EventComponent : MonoBehaviour
                 }
                 if (micView != null)
                 {
-                    if (micView.IsRecording)
+                    var meter = micView.RecorderInUse.LevelMeter;
+                    // var voiceAudio = ConstantFields.GetVoiceAudioField().GetValue(recorder) as LocalVoiceAudioFloat;
+                    // var level = voiceAudio.LevelMeter;
+                    if (micView.IsRecording && ((float)ConstantFields.GetVoiceAudioField().GetValue((meter))) > Plugin.configMicDetectionThreshold.Value)
                     {
                         micIcon.texture = Plugin.micOnTex;
                     }
@@ -55,10 +64,13 @@ public class EventComponent : MonoBehaviour
                 }
                 else
                 {
-                    var view = Character.localCharacter?.GetComponent<PhotonVoiceView>();
-                    if (view != null)
+                    if (Character.localCharacter != null)
                     {
-                        micView = view;
+                        var view = Character.localCharacter?.GetComponent<PhotonVoiceView>();
+                        if (view != null)
+                        {
+                            micView = view;
+                        }
                     }
                 }
             }
