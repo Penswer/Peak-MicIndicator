@@ -1,0 +1,9 @@
+{
+    "name": "MicIndicator",
+    "version_number": "1.0.0",
+    "website_url": "https://github.com/Penswer/Peak-MicIndicator",
+    "description": "Simple mod that shows when your mic is in use.",
+    "dependencies": [
+        "BepInEx-BepInExPack_PEAK-5.4.2403"
+    ]
+}
