@@ -1,9 +1,9 @@
-using UnityEngine;
 using System;
 using MicIndicator;
-using Photon.Voice.PUN;
-using UnityEngine.UI;
 using Photon.Voice;
+using Photon.Voice.PUN;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class EventComponent : MonoBehaviour
 {
@@ -12,12 +12,13 @@ public class EventComponent : MonoBehaviour
 
     void Update()
     {
-
         if (Plugin.itsTimeXD)
         {
             if (micIcon == null)
             {
-                var micIconLocal = GameObject.Find("/GAME/GUIManager/Canvas_HUD/Inventory/Layout/UI_InventoryBackpack/Icon/");
+                var micIconLocal = GameObject.Find(
+                    "/GAME/GUIManager/Canvas_HUD/Inventory/Layout/UI_InventoryBackpack/Icon/"
+                );
                 var micIconLocalParent = GameObject.Find("/GAME/GUIManager/Canvas_HUD/");
                 if (micIconLocal != null && micIconLocalParent != null)
                 {
@@ -27,8 +28,14 @@ public class EventComponent : MonoBehaviour
                     // micIconLocal.transform.localScale = new Vector3(Plugin.configScale.Value, Plugin.configScale.Value, Plugin.configScale.Value);
                     // micIconLocal.transform.localPosition = new Vector3(Plugin.configPosition.Value.x, Plugin.configPosition.Value.y, 0.0f);
                     RectTransform rect = micIconLocal.transform as RectTransform;
-                    rect.anchoredPosition = new Vector2(Plugin.configPosition.Value.x, Plugin.configPosition.Value.y);
-                    rect.sizeDelta = new Vector2(Plugin.configScale.Value, Plugin.configScale.Value);
+                    rect.anchoredPosition = new Vector2(
+                        Plugin.configPosition.Value.x,
+                        Plugin.configPosition.Value.y
+                    );
+                    rect.sizeDelta = new Vector2(
+                        Plugin.configScale.Value,
+                        Plugin.configScale.Value
+                    );
                     rect.anchorMax = new Vector2(0, 0);
                     rect.anchorMin = new Vector2(0, 0);
                     rect.localScale = new Vector3(1.0f, 1.0f, 1.0f);
@@ -53,13 +60,34 @@ public class EventComponent : MonoBehaviour
                     var meter = micView.RecorderInUse.LevelMeter;
                     // var voiceAudio = ConstantFields.GetVoiceAudioField().GetValue(recorder) as LocalVoiceAudioFloat;
                     // var level = voiceAudio.LevelMeter;
-                    if (micView.IsRecording && ((float)ConstantFields.GetVoiceAudioField().GetValue((meter))) > Plugin.configMicDetectionThreshold.Value)
+                    if (meter != null)
                     {
-                        micIcon.texture = Plugin.micOnTex;
-                    }
-                    else
-                    {
-                        micIcon.texture = Plugin.micOffTex;
+                        if (meter is AudioUtil.LevelMeterShort)
+                        {
+                            if (micView.IsRecording && ((float)ConstantFields.GetVoiceAudioFieldShort().GetValue((meter))) > Plugin.configMicDetectionThreshold.Value)
+                            {
+                                micIcon.texture = Plugin.micOnTex;
+                            }
+                            else
+                            {
+                                micIcon.texture = Plugin.micOffTex;
+                            }
+                        }
+                        else if (meter is AudioUtil.LevelMeterFloat)
+                        {
+                            if (micView.IsRecording && ((float)ConstantFields.GetVoiceAudioField().GetValue((meter))) > Plugin.configMicDetectionThreshold.Value)
+                            {
+                                micIcon.texture = Plugin.micOnTex;
+                            }
+                            else
+                            {
+                                micIcon.texture = Plugin.micOffTex;
+                            }
+                        }
+                        else
+                        {
+                            Plugin.Logger.LogInfo("Zamn ;-; Thats crazy my man");
+                        }
                     }
                 }
                 else
@@ -77,16 +105,9 @@ public class EventComponent : MonoBehaviour
         }
     }
 
-    void OnGUI()
-    {
-    }
+    void OnGUI() { }
 
-    void LateUpdate()
-    {
-    }
+    void LateUpdate() { }
 
-    void Start()
-    {
-    }
-
+    void Start() { }
 }

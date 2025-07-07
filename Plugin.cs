@@ -1,22 +1,22 @@
-﻿using BepInEx;
-using UnityEngine;
-using BepInEx.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Photon.Pun;
-using Zorro.Core.Serizalization;
-using pworld.Scripts;
-using HarmonyLib;
-using BepInEx.Configuration;
-using UnityEngine.UI;
-using System.Reflection;
 using System.Drawing;
-using System.IO;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using BepInEx;
+using BepInEx.Configuration;
+using BepInEx.Logging;
 using ExitGames.Client.Photon.StructWrapping;
+using HarmonyLib;
+using Photon.Pun;
+using pworld.Scripts;
 using Sirenix.Utilities;
 using Unity.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+using Zorro.Core.Serizalization;
 
 namespace MicIndicator;
 
@@ -41,11 +41,26 @@ public class Plugin : BaseUnityPlugin
     private void Awake()
     {
         // Plugin startup logic
-        configToggleKey = Config.Bind("Keybinds", "ToggleKey", KeyCode.End, "The key used to toggle the GUI on and off");
+        configToggleKey = Config.Bind(
+            "Keybinds",
+            "ToggleKey",
+            KeyCode.End,
+            "The key used to toggle the GUI on and off"
+        );
         configIsActive = Config.Bind("GUI", "IsActive", true, "If the icon is showing");
-        configPosition = Config.Bind("GUI", "Position", new Vector2(100f, 160f), "The position of the icon");
+        configPosition = Config.Bind(
+            "GUI",
+            "Position",
+            new Vector2(100f, 160f),
+            "The position of the icon"
+        );
         configScale = Config.Bind("GUI", "Scale", 100f, "The scale of the icon");
-        configMicDetectionThreshold = Config.Bind("Mic", "MicDetectionThreshold", .001f, "Mic Detection Min Value. Increase to make mic detection less sensitive. Decrease to make it more sensitive");
+        configMicDetectionThreshold = Config.Bind(
+            "Mic",
+            "MicDetectionThreshold",
+            .001f,
+            "Mic Detection Min Value. Increase to make mic detection less sensitive. Decrease to make it more sensitive"
+        );
         Logger = base.Logger;
         Logger.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         foreach (var option in Environment.GetCommandLineArgs())
@@ -81,5 +96,4 @@ public class Plugin : BaseUnityPlugin
             return tex;
         }
     }
-
 }
